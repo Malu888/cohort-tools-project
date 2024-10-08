@@ -1,15 +1,29 @@
+const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const PORT = 5005;
 
+//MONGOOSE 
+
+
+
+
+mongoose
+  .connect("mongodb://localhost:27017/cohorts-tools-api")
+  .then(x => console.log(`Connected to Database: "${x.connections[0].name}"`))
+  .catch(err => console.error("Error connecting to MongoDB", err));
+
+ 
+
+
 // STATIC DATA
 // Devs Team - Import the provided files with JSON data of students and cohorts here:
 // ...
+const Cohorts = require("./models/Cohorts.models");
+const Students = require("./models/Students.model");
 
-const cohorts =  require("./cohorts.json")
-const students = require("./students.json")
 
 // INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
 const app = express();
@@ -21,9 +35,9 @@ const app = express();
 // ...
 app.use(
   cors({
-    origin:"http://localhost:5173/", 
+    origin:"http://localhost:5173", 
     methods: ["GET", "POST", "DELETE", "PUT"],  //metodos que estan permitidos
-    credencials: true     //si se necesitan enviar cookies
+    credentials: true     //si se necesitan enviar cookies
   })
 );
 app.use(express.json());
@@ -42,12 +56,37 @@ app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
 
+// app.get("/api/cohorts", (req, res) => {
+//   res.json(cohorts)
+// });
+
+
+//  GET  /books - Retrieve all books from the database
 app.get("/api/cohorts", (req, res) => {
-  res.json(cohorts)
+  Cohorts.find({})
+    .then((cohorts) => {
+      res.json(cohorts);
+    })
+    .catch((error) => {
+      console.error("Error while retrieving cohorts ->", error);
+      res.status(500).send({ error: "Failed to retrieve cohorts" });
+    });
 });
 
+
+// app.get("/api/students", (req, res) => {
+//   res.json(students)
+// });
+
 app.get("/api/students", (req, res) => {
-  res.json(students)
+  Students.find({})
+    .then((students) => {
+      res.json(students);
+    })
+    .catch((error) => {
+      console.error("Error while retrieving students ->", error);
+      res.status(500).send({ error: "Failed to retrieve students" });
+    });
 });
 
 // START SERVER
