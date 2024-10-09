@@ -11,10 +11,12 @@ const studentsSchema = new Schema({
     email: String,
     phone: String,
     linkedinUrl: String,
-    languages:  [String, String],
-    program:[String, String],
-    projects: [],
-    students: [{ type: Schema.Types.ObjectId, ref: 'Student'}]
+    languages:  [String],
+    program: String,
+    background: String,
+    image: String,
+    cohort: [{ type: Schema.Types.ObjectId, ref: 'Cohort'}],
+    projects: []
 });
 
 
@@ -23,7 +25,9 @@ const studentsSchema = new Schema({
 // The model() method defines a model (Book) and creates a collection (books) in MongoDB
 // The collection name will default to the lowercased, plural form of the model name:
 //                          "Book" --> "books"
-const Cohorts = mongoose.model("Students", studentsSchema);
+const Students = mongoose.model("Student", studentsSchema);
 
 // EXPORT THE MODEL
-module.exports = Cohorts;
+module.exports = Students;
+
+

@@ -5,18 +5,17 @@ const Schema = mongoose.Schema;
 // CREATE SCHEMA
 // Schema - describes and enforces the structure of the documents
 const cohortsSchema = new Schema({
-    
-    inProgress: Boolean,
-    cohortSlug: String,
-    cohortName: String,
-    program: String,
-    campus: String,
-    startDate: String,
-    endDate: String,
-    programManager: String,
-    leadTeacher :String,
-    totalHours: Number,
-    students: [{ type: Schema.Types.ObjectId, ref: 'Student'}]
+  cohortSlug: String,
+  cohortName: String,
+  program: String,
+  format: String,
+  campus: String,
+  startDate: String,
+  endDate: String,
+  inProgress: Boolean,
+  programManager: String,
+  leadTeacher: String,
+  totalHours: Number,
 });
 
 // CREATE MODEL
@@ -27,4 +26,4 @@ const cohortsSchema = new Schema({
 
 // EXPORT THE MODEL
 //module.exports = Cohorts;
-module.exports = mongoose.model('Cohort', cohortsSchema);
+module.exports = mongoose.model("Cohort", cohortsSchema);
