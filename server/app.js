@@ -51,11 +51,10 @@ app.get("/docs", (req, res) => {
 app.get("/api/cohorts", (req, res) => {
   Cohort.find()
     .then((cohorts) => {
-      res.json(cohorts);
+      res.status(202).json(cohorts);
     })
     .catch((error) => {
-      console.error("Error while retrieving cohorts ->", error);
-      res.status(500).send({ error: "Failed to retrieve cohorts" });
+      next(error)
     });
 });
 
@@ -66,11 +65,10 @@ app.get("/api/cohorts", (req, res) => {
 app.get("/api/students", (req, res) => {
   Student.find()
     .then((students) => {
-      res.json(students);
+      res.status(202).json(students);
     })
     .catch((error) => {
-      console.error("Error while retrieving students ->", error);
-      res.status(500).send({ error: "Failed to retrieve students" });
+        next(error);
     });
 });
 
@@ -86,9 +84,9 @@ app.post("/api/students", async (req, res) => {
       program: req.body.program,
       projects: req.body.projects,
     });
-    res.json(response);
+    res.status(201).json(response);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 //recuperar todos los estudiantes en la coleccion de la base de datos
@@ -96,18 +94,18 @@ app.get('/api/students/cohort/:cohortId', async (req, res) => {
   try{
     console.log(req.params.cohortId)
     const response= await Student.find({cohort: req.params.cohortId})
-    res.json(response)
+    res.status(200).json(response)
   }catch (error){
-    console.log(error)
+    next(error);
   }
 })
 //recuperar un estudiante especifico
 app.get("/api/students/:studentId", async (req, res)=>{
   try{
     const response= await Student.findById(req.params.studentId)
-    res.json(response)
+    res.status(200).json(response)
   }catch (error){
-    console.log(error)
+    next(error)
   }
 })
 //actualiza un estudiante especifico
@@ -127,9 +125,9 @@ app.put("/api/students/:studentId", async (req, res)=>{
     cohort: req.body.cohort,
     projects: req.body.projects
     }, {new: true})
-  res.json(response)
+  res.status(202).json(response)
      } catch (error) {
-console.log(error)
+      next(error)
 }
 })
 
@@ -139,10 +137,10 @@ console.log(error)
 app.delete("/api/students/:studentId", async (req, res)=>{
   try{
     await Student.findByIdAndDelete(req.params.studentId)
-    res.send()
+    res.status(200).send()
     
   }catch (error){
-    console.log(error)
+    next(error)
   }
 })
   
@@ -162,9 +160,9 @@ try {
     leadTeacher: req.body.leadTeacher,
     totalHours: req.body.totalHours
   })
-  res.json(response)
+  res.status(201).json(response)
 } catch (error) {
-  console.log(error)
+  next(error)
 }
 }) 
 
@@ -172,9 +170,9 @@ try {
 app.get("/api/cohorts/:cohortId", async (req, res)=>{
   try{
     const response= await Cohort.findById(req.params.cohortId)
-    res.json(response)
+    res.status(200).json(response)
   }catch (error){
-    console.log(error)
+    next(error)
   }
 })
 //actualiza un grupo especifico
@@ -193,9 +191,9 @@ app.put("/api/cohorts/:cohortId", async (req, res)=>{
           leadTeacher: req.body.leadTeacher,
           totalHours: req.body.totalHours
       }, {new: true})
-      res.json(response)
+      res.status(202).json(response)
   }catch(error){
-      console.log(error)
+    next(error)
   }
 })
 
@@ -203,12 +201,17 @@ app.put("/api/cohorts/:cohortId", async (req, res)=>{
 app.delete("/api/cohorts/:cohortId", async (req, res)=>{
   try{
     await Cohort.findByIdAndDelete(req.params.cohortId)
-    res.send()
+    res.status(200).send()
     
   }catch (error){
-    console.log(error)
+    next(error)
   }
 })
+
+ //GESTOR DE ERRORES
+
+const errorHandling= require("./error-handlers")
+errorHandling(app)
 
 
 
