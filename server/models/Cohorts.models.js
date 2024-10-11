@@ -1,4 +1,4 @@
-// ./models/Book.model.js
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -18,12 +18,5 @@ const cohortsSchema = new Schema({
   totalHours: Number,
 });
 
-// CREATE MODEL
-// The model() method defines a model (Book) and creates a collection (books) in MongoDB
-// The collection name will default to the lowercased, plural form of the model name:
-//                          "Book" --> "books"
-//const Cohorts = mongoose.model("Cohorts", cohortsSchema);
 
-// EXPORT THE MODEL
-//module.exports = Cohorts;
 module.exports = mongoose.model("Cohort", cohortsSchema);
