@@ -1,6 +1,6 @@
 const express = require("express");
 
-const PORT = 5005;
+const PORT = process.env.PORT ||5005;
 require("dotenv").config()
 require("./db");
 // STATIC DATA
